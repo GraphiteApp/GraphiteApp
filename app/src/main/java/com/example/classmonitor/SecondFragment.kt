@@ -19,6 +19,8 @@ class SecondFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    // use mainActivity.appModel
+    private val app = MainActivity.app
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +42,7 @@ class SecondFragment : Fragment() {
 
         val desmos: WebView = view.findViewById(R.id.webview)
         desmos.settings.javaScriptEnabled = true
-        desmos.loadUrl("https://www.desmos.com/calculator")
+        desmos.loadUrl(app.getCalculatorURL())
 
     }
 

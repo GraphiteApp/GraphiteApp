@@ -9,12 +9,30 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModel
 import com.example.classmonitor.databinding.ActivityMainBinding
+
+class AppModel: ViewModel() {
+    private var calculatorURL = "https://www.desmos.com/calculator"
+
+    fun getCalculatorURL(): String {
+        return calculatorURL
+    }
+
+    fun setCalculatorURL(newURL: String) {
+        calculatorURL = newURL
+    }
+}
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    // appModel
+    companion object {
+        val app = AppModel()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
