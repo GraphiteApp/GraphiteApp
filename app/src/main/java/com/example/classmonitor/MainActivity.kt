@@ -46,6 +46,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        // onclick settings, move to settings activity
+        menu.findItem(R.id.action_settings).setOnMenuItemClickListener {
+            val intent = android.content.Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            true
+        }
+
+
         return true
     }
 
