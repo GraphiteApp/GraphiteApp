@@ -54,13 +54,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        // onclick exam, move to exam activity
-        menu.findItem(R.id.action_exam).setOnMenuItemClickListener {
-            val intent = android.content.Intent(this, ExamActivity::class.java)
-            startActivity(intent)
-            true
-        }
-
 
         return true
     }
