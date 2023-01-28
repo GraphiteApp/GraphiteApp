@@ -10,7 +10,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.ViewModel
+import androidx.preference.PreferenceManager
 import com.example.classmonitor.databinding.ActivityMainBinding
+import okhttp3.OkHttpClient
 
 class AppModel: ViewModel() {
     private var calculatorURL = "https://www.desmos.com/calculator"
@@ -54,6 +56,58 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        // onclick start exam, check if teacherCode and username in settings are set
+        menu.findItem(R.id.action_exam).setOnMenuItemClickListener {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+            val teacherCode = sharedPref.getString("teacher_code", "").toString().uppercase()
+            val username = sharedPref.getString("pref_key_name", "").toString()
+            val apiURL = sharedPref.getString("api_url", "").toString()
+            if (teacherCode == "" || username == "") {
+                Snackbar.make(binding.root, "Please set class code and username in settings", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+                true
+            }
+
+            // http post request to server cm.thearchons.xyz/api/start_exam
+            // if response is 200, move to exam activity
+            // else, show error message
+
+            val url = apiURL + "join_exam"
+
+            // debug log url
+            println(url)
+            val client = OkHttpClient()
+            val request = okhttp3.Request.Builder()
+                .url(url)
+                .post(okhttp3.FormBody.Builder()
+                    .add("class_code", teacherCode)
+                    .add("username", username)
+                    .build())
+                .build()
+
+            client.newCall(request).enqueue(object: okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+                    println(e)
+                    Snackbar.make(binding.root, "Error connecting to server", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+                }
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    if (response.code == 200) {
+                        // TODO move to exam activity
+                        //val intent = android.content.Intent(this@MainActivity, Exam::class.java)
+                        //startActivity(intent)
+                    } else {
+                        println(response)
+                        Snackbar.make(binding.root, "Error connecting to server", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
+                }
+            })
+
+            true
+        }
+
 
         return true
     }
@@ -73,4 +127,8 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+}
+
+private fun MenuItem.setOnMenuItemClickListener(function: (MenuItem) -> Unit) {
+
 }

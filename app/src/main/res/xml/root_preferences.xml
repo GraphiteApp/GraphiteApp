@@ -15,5 +15,11 @@
             app:title="Teacher Code"
             app:useSimpleSummaryProvider="true" />
 
+        <EditTextPreference
+            app:key="api_url"
+            app:title="API URL"
+            app:defaultValue="https://cm.thearchons.xyz/api/"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
 </PreferenceScreen>
