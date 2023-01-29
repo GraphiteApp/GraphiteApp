@@ -12,7 +12,9 @@ import android.view.MenuItem
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import com.example.classmonitor.databinding.ActivityMainBinding
+import okhttp3.Call
 import okhttp3.OkHttpClient
+import java.io.IOException
 
 class AppModel: ViewModel() {
     private var calculatorURL = "https://www.desmos.com/calculator"
@@ -93,9 +95,56 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                         if (response.code == 200) {
-                            // TODO move to exam activity
-                            //val intent = android.content.Intent(this@MainActivity, Exam::class.java)
-                            //startActivity(intent)
+                            // Get allowed calculators
+                            val allowedCalculators = arrayOf<String>()
+
+                            val allowedCalculatorRequest = okhttp3.Request.Builder()
+                                .url(apiURL + "get_calculators" + "?class_code=" + teacherCode)
+                                .build()
+
+                            client.newCall(allowedCalculatorRequest).enqueue(object: okhttp3.Callback {
+                                override fun onFailure(call: Call, e: IOException) {
+                                    TODO("Not yet implemented")
+                                }
+
+                                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                                    if (response.code == 200) {
+                                        val responseBody = response.body?.string()
+                                        val json = org.json.JSONObject(responseBody)
+                                        // print json
+                                        println(json)
+                                        // get basic
+                                        val basic = json.getBoolean("basic")
+                                        if (basic) {
+                                            allowedCalculators.plus("basic")
+                                        }
+                                        // get scientific
+                                        val scientific = json.getBoolean("scientific")
+                                        if (scientific) {
+                                            allowedCalculators.plus("scientific")
+                                        }
+                                        // get graphing
+                                        val graphing = json.getBoolean("graphing")
+                                        if (graphing) {
+                                            allowedCalculators.plus("graphing")
+                                        }
+                                    }
+                                }
+                            })
+
+
+                            // move to first fragment, pass in allowedCalculators
+                            println("Sending allowed calculators")
+                            // print type of allowedCalculators
+                            println(allowedCalculators::class.java)
+                            println(allowedCalculators.joinToString { " " })
+                            // convert to ArrayList<java.lang.String>
+                            val allowedCalculatorsList = allowedCalculators.toList()
+                            val bundle = Bundle();
+                            bundle.putStringArray("allowedCalculators", allowedCalculators)
+                            val intent = android.content.Intent(this@MainActivity, ExamActivity::class.java)
+                            intent.putExtras(bundle)
+                            startActivity(intent)
                         } else {
                             println(response)
                             Snackbar.make(binding.root, "Error connecting to server", Snackbar.LENGTH_LONG)
