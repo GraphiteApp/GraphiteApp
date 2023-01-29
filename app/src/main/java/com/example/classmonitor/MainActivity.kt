@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                         if (response.code == 200) {
                             // Get allowed calculators
-                            val allowedCalculators = arrayOf<String>()
+                            val allowedCalculators = arrayListOf<String>()
 
                             val allowedCalculatorRequest = okhttp3.Request.Builder()
                                 .url(apiURL + "get_calculators" + "?class_code=" + teacherCode)
@@ -111,40 +111,31 @@ class MainActivity : AppCompatActivity() {
                                     if (response.code == 200) {
                                         val responseBody = response.body?.string()
                                         val json = org.json.JSONObject(responseBody)
-                                        // print json
-                                        println(json)
                                         // get basic
                                         val basic = json.getBoolean("basic")
                                         if (basic) {
-                                            allowedCalculators.plus("basic")
+                                            allowedCalculators += "basic"
                                         }
                                         // get scientific
                                         val scientific = json.getBoolean("scientific")
                                         if (scientific) {
-                                            allowedCalculators.plus("scientific")
+                                            allowedCalculators += "scientific"
                                         }
                                         // get graphing
                                         val graphing = json.getBoolean("graphing")
                                         if (graphing) {
-                                            allowedCalculators.plus("graphing")
+                                            allowedCalculators += "graphing"
                                         }
+
+                                        // move to first fragment, pass in allowedCalculators
+                                        val bundle = Bundle();
+                                        bundle.putStringArrayList("allowedCalculators", allowedCalculators)
+                                        val intent = android.content.Intent(this@MainActivity, ExamActivity::class.java)
+                                        intent.putExtras(bundle)
+                                        startActivity(intent)
                                     }
                                 }
                             })
-
-
-                            // move to first fragment, pass in allowedCalculators
-                            println("Sending allowed calculators")
-                            // print type of allowedCalculators
-                            println(allowedCalculators::class.java)
-                            println(allowedCalculators.joinToString { " " })
-                            // convert to ArrayList<java.lang.String>
-                            val allowedCalculatorsList = allowedCalculators.toList()
-                            val bundle = Bundle();
-                            bundle.putStringArray("allowedCalculators", allowedCalculators)
-                            val intent = android.content.Intent(this@MainActivity, ExamActivity::class.java)
-                            intent.putExtras(bundle)
-                            startActivity(intent)
                         } else {
                             println(response)
                             Snackbar.make(binding.root, "Error connecting to server", Snackbar.LENGTH_LONG)
