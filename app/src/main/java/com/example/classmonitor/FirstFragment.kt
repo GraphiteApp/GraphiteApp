@@ -30,9 +30,8 @@ class FirstFragment : Fragment() {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
 
-        // if in examActivity, get allowedCalculators
-
-        val calculatorSelections = arrayOf("Basic", "Scientific", "Graphing")
+        // set calculatorSelections to the allowedCalculators from appModel
+        val calculatorSelections = app.getAllowedCalculators().toTypedArray()
 
         // update the spinner calculatorSpinner
         binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, calculatorSelections)
@@ -60,6 +59,11 @@ class FirstFragment : Fragment() {
             navigateToSecondFragment()
         }
 
+        // print allowed calculators
+        println(app.getAllowedCalculators())
+
+        // update the spinner calculatorSpinner
+        binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, app.getAllowedCalculators().toTypedArray())
 
     }
 

@@ -1,18 +1,26 @@
 package com.example.classmonitor
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.FragmentNavigatorExtras
 
 class ExamActivity : AppCompatActivity() {
+    // use appModel from MainActivity
+    companion object {
+        val app = MainActivity.app
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_exam)
 
         // get allowedCalculators from intent
-        val allowedCalculators = intent.getStringArrayListExtra("allowedCalculators")
+        intent.getStringArrayListExtra("allowedCalculators")?.let { app.setAllowedCalculators(it) }
 
-        println("allowedCalculators: ")
-        println(allowedCalculators)
+        // print allowed calculators
+        println("Allowed calculators: ${app.getAllowedCalculators()}")
+
+        setContentView(R.layout.activity_exam)
     }
 
 

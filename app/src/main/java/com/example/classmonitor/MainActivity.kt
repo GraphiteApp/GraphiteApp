@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient
 import java.io.IOException
 
 class AppModel: ViewModel() {
+    // calculator url
     private var calculatorURL = "https://www.desmos.com/calculator"
 
     fun getCalculatorURL(): String {
@@ -25,6 +26,17 @@ class AppModel: ViewModel() {
 
     fun setCalculatorURL(newURL: String) {
         calculatorURL = newURL
+    }
+
+    // arraylist of allowed calculators
+    private var allowedCalculators = ArrayList<String>()
+
+    fun getAllowedCalculators(): ArrayList<String> {
+        return allowedCalculators
+    }
+
+    fun setAllowedCalculators(newAllowedCalculators: ArrayList<String>) {
+        allowedCalculators = newAllowedCalculators
     }
 }
 
@@ -40,6 +52,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // set allowed calculators to all 3
+        app.setAllowedCalculators(arrayListOf("Basic", "Scientific", "Graphing"))
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -114,17 +129,17 @@ class MainActivity : AppCompatActivity() {
                                         // get basic
                                         val basic = json.getBoolean("basic")
                                         if (basic) {
-                                            allowedCalculators += "basic"
+                                            allowedCalculators += "Basic"
                                         }
                                         // get scientific
                                         val scientific = json.getBoolean("scientific")
                                         if (scientific) {
-                                            allowedCalculators += "scientific"
+                                            allowedCalculators += "Scientific"
                                         }
                                         // get graphing
                                         val graphing = json.getBoolean("graphing")
                                         if (graphing) {
-                                            allowedCalculators += "graphing"
+                                            allowedCalculators += "Graphing"
                                         }
 
                                         // move to first fragment, pass in allowedCalculators
