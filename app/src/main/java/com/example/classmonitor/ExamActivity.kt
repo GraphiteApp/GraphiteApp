@@ -14,4 +14,6 @@ class ExamActivity : AppCompatActivity() {
         println("allowedCalculators: ")
         println(allowedCalculators)
     }
+
+
 }

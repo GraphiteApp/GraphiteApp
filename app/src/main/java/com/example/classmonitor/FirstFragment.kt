@@ -30,6 +30,8 @@ class FirstFragment : Fragment() {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
 
+        // if in examActivity, get allowedCalculators
+
         val calculatorSelections = arrayOf("Basic", "Scientific", "Graphing")
 
         // update the spinner calculatorSpinner
