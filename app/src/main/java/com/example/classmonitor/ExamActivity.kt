@@ -13,7 +13,5 @@ class ExamActivity : AppCompatActivity() {
 
         println("allowedCalculators: ")
         println(allowedCalculators)
-
-        // TODO show FirstFragment and pass allowedCalculators
     }
 }
