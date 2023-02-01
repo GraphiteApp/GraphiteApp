@@ -65,6 +65,17 @@ class FirstFragment : Fragment() {
         // update the spinner calculatorSpinner
         binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, app.getAllowedCalculators().toTypedArray())
 
+        // if isExamMode is true, then unhide the exit_exam button. Otherwise, hide it
+        if (app.getIsExamMode()) {
+            binding.exitExam.visibility = View.VISIBLE
+        } else {
+            binding.exitExam.visibility = View.GONE
+        }
+
+        // if exit_exam button is clicked run leaveExam in examactivity
+        binding.exitExam.setOnClickListener {
+            (activity as ExamActivity).leaveExam()
+        }
     }
 
     override fun onDestroyView() {

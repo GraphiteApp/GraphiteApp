@@ -38,6 +38,17 @@ class AppModel: ViewModel() {
     fun setAllowedCalculators(newAllowedCalculators: ArrayList<String>) {
         allowedCalculators = newAllowedCalculators
     }
+
+    // is exam mode
+    private var isExamMode = false
+
+    fun getIsExamMode(): Boolean {
+        return isExamMode
+    }
+
+    fun setIsExamMode(newIsExamMode: Boolean) {
+        isExamMode = newIsExamMode
+    }
 }
 
 class MainActivity : AppCompatActivity() {
