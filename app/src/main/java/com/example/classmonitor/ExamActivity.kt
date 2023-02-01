@@ -46,7 +46,7 @@ class ExamActivity : AppCompatActivity() {
 
         // send request
         client.newCall(request).enqueue(object: okhttp3.Callback {
-override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
                 AlertDialog.Builder(this@ExamActivity)
                     .setTitle("Error")
                     .setMessage("Could not leave exam. Please check your internet connection.")
@@ -55,7 +55,6 @@ override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
             }
 
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                println("Response: ${response.code}")
                 // disable exam mode
                 app.setIsExamMode(false)
 
