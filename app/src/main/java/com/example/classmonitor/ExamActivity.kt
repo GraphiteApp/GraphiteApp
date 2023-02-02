@@ -1,6 +1,11 @@
 package com.example.classmonitor
 
+import android.content.Context
+import android.hardware.display.DisplayManager
+import android.media.projection.MediaProjection
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -24,6 +29,28 @@ class ExamActivity : AppCompatActivity() {
         app.setIsExamMode(true)
 
         setContentView(R.layout.activity_exam)
+
+        // start video recording
+
+        // get media projection manager
+        val mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        // get media projection
+        val mediaProjection = mediaProjectionManager.getMediaProjection(RESULT_OK, intent)
+        val metrics = DisplayMetrics()
+        // create virtual display
+        val virtualDisplay = mediaProjection.createVirtualDisplay(
+            "examRecording",
+            metrics.widthPixels,
+            metrics.heightPixels,
+            metrics.densityDpi,
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
+            null,
+            null,
+            null
+        )
+
+        // start recording
+
     }
 
     fun leaveExam() {
