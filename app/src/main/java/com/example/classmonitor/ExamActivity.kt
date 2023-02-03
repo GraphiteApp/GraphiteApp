@@ -1,15 +1,19 @@
 package com.example.classmonitor
 
 import android.content.Context
+import android.content.res.Resources
 import android.hardware.display.DisplayManager
+import android.media.CamcorderProfile
+import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.preference.PreferenceManager
 import okhttp3.OkHttpClient
 
@@ -19,6 +23,9 @@ class ExamActivity : AppCompatActivity() {
         val app = MainActivity.app
     }
 
+    var mMediaRecorder = MediaRecorder()
+
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,33 +38,63 @@ class ExamActivity : AppCompatActivity() {
         setContentView(R.layout.activity_exam)
 
         // start video recording
-
-        // get media projection manager
-        val mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        // get media projection
-        val mediaProjection = mediaProjectionManager.getMediaProjection(RESULT_OK, intent)
-        val metrics = DisplayMetrics()
-        // create virtual display
-        val virtualDisplay = mediaProjection.createVirtualDisplay(
-            "examRecording",
-            metrics.widthPixels,
-            metrics.heightPixels,
-            metrics.densityDpi,
-            DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
-            null,
-            null,
-            null
-        )
-
-        // start recording
-
+        recorder(true)
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun recorder(isStart: Boolean) {
+        if (isStart) {
+            // start video recording
+
+            // get media projection manager
+            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+            val width = Resources.getSystem().displayMetrics.widthPixels
+            val height = Resources.getSystem().displayMetrics.heightPixels
+
+            // print width and height
+            println("Width: $width")
+            println("Height: $height")
+
+            val context = this
+
+            mMediaRecorder = MediaRecorder(context)
+
+            mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)
+
+            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+
+            mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+
+            mMediaRecorder.setVideoFrameRate(15)
+
+            mMediaRecorder.setVideoSize(width, height)
+
+            // get media path
+            val mediaPath = getExternalFilesDir(null)?.absolutePath
+
+            mMediaRecorder.setOutputFile("$mediaPath" + "test.m4e")
+
+            println("Media path: $mediaPath")
+
+            mMediaRecorder.prepare()
+
+            mMediaRecorder.start()
+        } else {
+            // stop video recording
+            mMediaRecorder.stop()
+            mMediaRecorder.release()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
     fun leaveExam() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         val teacherCode = sharedPref.getString("teacher_code", "").toString().uppercase()
         val username = sharedPref.getString("pref_key_name", "").toString()
         val apiURL = sharedPref.getString("api_url", "").toString()
+
+        // stop video recording
+        recorder(false)
 
         // send POST request to server
         val client = OkHttpClient()
