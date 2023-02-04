@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.hardware.display.DisplayManager
 import android.media.CamcorderProfile
+import android.media.EncoderProfiles
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
@@ -14,6 +15,7 @@ import android.util.DisplayMetrics
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
 import okhttp3.OkHttpClient
 
@@ -23,7 +25,8 @@ class ExamActivity : AppCompatActivity() {
         val app = MainActivity.app
     }
 
-    var mMediaRecorder = MediaRecorder()
+    // media recorder, null by default
+    var mMediaRecorder: MediaRecorder? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +40,9 @@ class ExamActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_exam)
 
+        // request permission to record screen
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+
         // start video recording
         recorder(true)
     }
@@ -45,6 +51,9 @@ class ExamActivity : AppCompatActivity() {
     private fun recorder(isStart: Boolean) {
         if (isStart) {
             // start video recording
+
+            // create media recorder
+            mMediaRecorder = MediaRecorder(this)
 
             // get media projection manager
             getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
@@ -55,34 +64,28 @@ class ExamActivity : AppCompatActivity() {
             println("Width: $width")
             println("Height: $height")
 
-            val context = this
+            mMediaRecorder!!.setVideoSource(MediaRecorder.VideoSource.SURFACE)
 
-            mMediaRecorder = MediaRecorder(context)
+            mMediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
 
-            mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)
+            mMediaRecorder!!.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
 
-            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            mMediaRecorder!!.setVideoFrameRate(15)
 
-            mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-
-            mMediaRecorder.setVideoFrameRate(15)
-
-            mMediaRecorder.setVideoSize(width, height)
+            mMediaRecorder!!.setVideoSize(width, height)
 
             // get media path
             val mediaPath = getExternalFilesDir(null)?.absolutePath
 
-            mMediaRecorder.setOutputFile("$mediaPath" + "test.m4e")
+            mMediaRecorder!!.setOutputFile("$mediaPath" + "test.m4e")
 
             println("Media path: $mediaPath")
 
-            mMediaRecorder.prepare()
+            mMediaRecorder?.prepare()
 
-            mMediaRecorder.start()
+            mMediaRecorder?.start()
         } else {
-            // stop video recording
-            mMediaRecorder.stop()
-            mMediaRecorder.release()
+            //mMediaRecorder?.stop()
         }
     }
 
