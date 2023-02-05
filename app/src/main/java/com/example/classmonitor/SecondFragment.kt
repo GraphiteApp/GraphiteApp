@@ -29,6 +29,8 @@ class SecondFragment : Fragment() {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
 
+
+
         return binding.root
 
     }
@@ -42,6 +44,11 @@ class SecondFragment : Fragment() {
 
         val desmos: WebView = view.findViewById(R.id.webview)
         desmos.settings.javaScriptEnabled = true
+
+        // set webview to fullscreen
+        desmos.settings.loadWithOverviewMode = true
+        desmos.settings.useWideViewPort = true
+
         desmos.loadUrl(app.getCalculatorURL())
 
     }
