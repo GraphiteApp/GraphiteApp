@@ -68,16 +68,27 @@ class FirstFragment : Fragment() {
         // update the spinner calculatorSpinner
         binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, app.getAllowedCalculators().toTypedArray())
 
-        // if isExamMode is true, then unhide the exit_exam button. Otherwise, hide it
-        if (app.getIsExamMode()) {
-            binding.exitExam.visibility = View.VISIBLE
-        } else {
-            binding.exitExam.visibility = View.GONE
-        }
-
         // if exit_exam button is clicked run leaveExam in examactivity
         binding.exitExam.setOnClickListener {
             (activity as ExamActivity).leaveExam()
+        }
+
+        // hide calculatorSpinner and button_first if isExamMode is true
+        if (app.getIsExamMode()) {
+            binding.exitExam.visibility = View.VISIBLE
+            binding.calculatorSpinner.visibility = View.GONE
+            binding.buttonFirst.visibility = View.GONE
+            // if calculators is empty
+            if (app.getAllowedCalculators().isEmpty()) {
+                binding.textviewFirst.text = "Exam Mode:\n\n No Calculators Allowed"
+            } else {
+                binding.textviewFirst.text = "Exam Mode:\n\n Allowed Calculators:\n${app.getAllowedCalculators().joinToString("\n")}"
+            }
+        } else {
+            binding.exitExam.visibility = View.GONE
+            binding.calculatorSpinner.visibility = View.VISIBLE
+            binding.buttonFirst.visibility = View.VISIBLE
+            binding.textviewFirst.text = "Welcome! Select the desired calculator type below."
         }
     }
 
