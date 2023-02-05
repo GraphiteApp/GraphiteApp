@@ -1,4 +1,4 @@
-package com.example.classmonitor
+package com.example.graphite
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

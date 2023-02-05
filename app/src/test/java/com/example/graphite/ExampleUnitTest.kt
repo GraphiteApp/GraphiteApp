@@ -1,4 +1,4 @@
-package com.example.classmonitor
+package com.example.graphite
 
 import org.junit.Test
 

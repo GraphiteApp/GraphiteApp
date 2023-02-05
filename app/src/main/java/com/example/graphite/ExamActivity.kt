@@ -1,23 +1,18 @@
-package com.example.classmonitor
+package com.example.graphite
 
-import android.content.Context
+import android.Manifest
 import android.content.res.Resources
-import android.hardware.display.DisplayManager
-import android.media.CamcorderProfile
-import android.media.EncoderProfiles
 import android.media.MediaRecorder
-import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.DisplayMetrics
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
-import okhttp3.OkHttpClient
+import okhttp3.*
+import java.io.IOException
 
 class ExamActivity : AppCompatActivity() {
     // use appModel from MainActivity
@@ -41,7 +36,7 @@ class ExamActivity : AppCompatActivity() {
         setContentView(R.layout.activity_exam)
 
         // request permission to record screen
-        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
 
         // start video recording
         recorder(true)
@@ -56,7 +51,7 @@ class ExamActivity : AppCompatActivity() {
             mMediaRecorder = MediaRecorder(this)
 
             // get media projection manager
-            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+            getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
             val width = Resources.getSystem().displayMetrics.widthPixels
             val height = Resources.getSystem().displayMetrics.heightPixels
 
@@ -101,10 +96,10 @@ class ExamActivity : AppCompatActivity() {
 
         // send POST request to server
         val client = OkHttpClient()
-        val request = okhttp3.Request.Builder()
+        val request = Request.Builder()
             .url("$apiURL" + "leave_exam")
             .post(
-                okhttp3.FormBody.Builder()
+                FormBody.Builder()
                     .add("class_code", teacherCode)
                     .add("username", username)
                     .build()
@@ -112,8 +107,8 @@ class ExamActivity : AppCompatActivity() {
             .build()
 
         // send request
-        client.newCall(request).enqueue(object: okhttp3.Callback {
-            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+        client.newCall(request).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
                 AlertDialog.Builder(this@ExamActivity)
                     .setTitle("Error")
                     .setMessage("Could not leave exam. Please check your internet connection.")
@@ -121,7 +116,7 @@ class ExamActivity : AppCompatActivity() {
                     .show()
             }
 
-            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+            override fun onResponse(call: Call, response: Response) {
                 // disable exam mode
                 app.setIsExamMode(false)
 

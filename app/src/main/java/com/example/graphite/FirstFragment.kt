@@ -1,4 +1,4 @@
-package com.example.classmonitor
+package com.example.graphite
 
 import android.os.Build
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.classmonitor.databinding.FragmentFirstBinding
+import com.example.graphite.databinding.FragmentFirstBinding
 
 
 /**
@@ -36,7 +36,7 @@ class FirstFragment : Fragment() {
         val calculatorSelections = app.getAllowedCalculators().toTypedArray()
 
         // update the spinner calculatorSpinner
-        binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, calculatorSelections)
+        binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), androidx.transition.R.layout.support_simple_spinner_dropdown_item, calculatorSelections)
 
         return binding.root
 
@@ -66,7 +66,7 @@ class FirstFragment : Fragment() {
         println(app.getAllowedCalculators())
 
         // update the spinner calculatorSpinner
-        binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, app.getAllowedCalculators().toTypedArray())
+        binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), androidx.transition.R.layout.support_simple_spinner_dropdown_item, app.getAllowedCalculators().toTypedArray())
 
         // if exit_exam button is clicked run leaveExam in examactivity
         binding.exitExam.setOnClickListener {

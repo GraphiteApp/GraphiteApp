@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.classmonitor'
+    namespace 'com.example.graphite'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.classmonitor"
+        applicationId "com.example.graphite"
         minSdk 28
         targetSdk 32
         versionCode 1
