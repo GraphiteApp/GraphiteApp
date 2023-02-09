@@ -76,13 +76,15 @@ class FirstFragment : Fragment() {
         // hide calculatorSpinner and button_first if isExamMode is true
         if (app.getIsExamMode()) {
             binding.exitExam.visibility = View.VISIBLE
-            binding.calculatorSpinner.visibility = View.GONE
-            binding.buttonFirst.visibility = View.GONE
             // if calculators is empty
-            if (app.getAllowedCalculators().isEmpty()) {
+            if (app.getAllowedCalculators().isEmpty()) { // if not allowed any calculators
                 binding.textviewFirst.text = "Exam Mode:\n\n No Calculators Allowed"
+                binding.calculatorSpinner.visibility = View.GONE
+                binding.buttonFirst.visibility = View.GONE
             } else {
                 binding.textviewFirst.text = "Exam Mode:\n\n Allowed Calculators:\n${app.getAllowedCalculators().joinToString("\n")}"
+                binding.calculatorSpinner.visibility = View.VISIBLE
+                binding.buttonFirst.visibility = View.VISIBLE
             }
         } else {
             binding.exitExam.visibility = View.GONE
