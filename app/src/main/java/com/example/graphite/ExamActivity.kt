@@ -6,6 +6,8 @@ import android.media.MediaRecorder
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
+import android.os.ParcelFileDescriptor
+import android.system.Os.socket
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,8 @@ import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
 import okhttp3.*
 import java.io.IOException
+import java.net.Socket
+
 
 class ExamActivity : AppCompatActivity() {
     // use appModel from MainActivity
@@ -22,6 +26,9 @@ class ExamActivity : AppCompatActivity() {
 
     // media recorder, null by default
     var mMediaRecorder: MediaRecorder? = null
+
+    //val socket = Socket("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self", 80) // TODO change to server
+    //val fileDescriptor: ParcelFileDescriptor = ParcelFileDescriptor.fromSocket(socket)
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +50,7 @@ class ExamActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun recorder(isStart: Boolean) {
+    fun recorder(isStart: Boolean) {
         if (isStart) {
             // start video recording
 
@@ -61,7 +68,16 @@ class ExamActivity : AppCompatActivity() {
 
             mMediaRecorder!!.setVideoSource(MediaRecorder.VideoSource.SURFACE)
 
-            mMediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            // TODO set output file path to server
+
+            // get media path
+            val mediaPath = getExternalFilesDir(null)?.absolutePath
+
+            mMediaRecorder!!.setOutputFile("$mediaPath" + "test.m4e")
+
+            //mMediaRecorder!!.setOutputFile(fileDescriptor.fileDescriptor)
+
+            mMediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
             mMediaRecorder!!.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
 
@@ -69,18 +85,12 @@ class ExamActivity : AppCompatActivity() {
 
             mMediaRecorder!!.setVideoSize(width, height)
 
-            // get media path
-            val mediaPath = getExternalFilesDir(null)?.absolutePath
+            //mMediaRecorder?.prepare()
 
-            mMediaRecorder!!.setOutputFile("$mediaPath" + "test.m4e")
-
-            println("Media path: $mediaPath")
-
-            mMediaRecorder?.prepare()
-
-            mMediaRecorder?.start()
+            //mMediaRecorder?.start()
         } else {
-            //mMediaRecorder?.stop()
+            // TODO FIX THIS
+            // mMediaRecorder?.stop()
         }
     }
 
