@@ -1,15 +1,8 @@
 package com.example.graphite
 
-import android.Manifest
-import android.content.res.Resources
-import android.media.MediaRecorder
-import android.media.projection.MediaProjectionManager
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
 import okhttp3.*
 import java.io.IOException
@@ -20,7 +13,7 @@ class ExamActivity : AppCompatActivity() {
         val app = MainActivity.app
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,7 +26,7 @@ class ExamActivity : AppCompatActivity() {
         setContentView(R.layout.activity_exam)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     fun leaveExam() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         val teacherCode = sharedPref.getString("teacher_code", "").toString().uppercase()
@@ -43,7 +36,7 @@ class ExamActivity : AppCompatActivity() {
         // send POST request to server
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("$apiURL" + "leave_exam")
+            .url(apiURL + "leave_exam")
             .post(
                 FormBody.Builder()
                     .add("class_code", teacherCode)
