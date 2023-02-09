@@ -14,6 +14,13 @@ class ExamActivity : AppCompatActivity() {
     }
 
 
+    // when activity is moved to the background
+    override fun onPause() {
+        super.onPause()
+        leaveExam()
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
