@@ -20,6 +20,25 @@ class ExamActivity : AppCompatActivity() {
         leaveExam()
     }
 
+    // when app is closed
+    override fun onDestroy() {
+        super.onDestroy()
+        leaveExam()
+    }
+
+    // when the back button is pressed
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Leave Exam")
+            .setMessage("Are you sure you want to leave the exam?")
+            .setPositiveButton("Yes") { _, _ ->
+                leaveExam()
+                super.onBackPressed()
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
