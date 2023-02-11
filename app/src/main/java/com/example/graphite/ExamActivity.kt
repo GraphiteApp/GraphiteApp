@@ -85,6 +85,9 @@ class ExamActivity : AppCompatActivity() {
                 // disable exam mode
                 app.setIsExamMode(false)
 
+                // enable all calculators
+                app.setAllowedCalculators(arrayListOf("Basic", "Scientific", "Graphing"))
+
                 // finish activity
                 finish()
             }
