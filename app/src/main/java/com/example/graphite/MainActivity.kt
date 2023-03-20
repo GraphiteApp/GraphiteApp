@@ -63,14 +63,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // set allowed calculators to all 3
-        ExamActivity.app.setAllowedCalculators(
-            arrayListOf(
-                mapOf("name" to "Graphing Calculator", "id" to "graphing"),
-                mapOf("name" to "Scientific Calculator", "id" to "scientific"),
-                mapOf("name" to "Basic Calculator", "id" to "basic")
-            )
-        )
+        // set allowed calculators to all desmos calculators
+        app.setAllowedCalculators(arrayListOf(
+            mapOf("name" to "Basic Calculator", "url" to "https://www.desmos.com/fourfunction"),
+            mapOf("name" to "Scientific Calculator", "url" to "https://www.desmos.com/scientific"),
+            mapOf("name" to "Graphing Calculator", "url" to "https://www.desmos.com/calculator"),
+        ))
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -142,17 +140,6 @@ class MainActivity : AppCompatActivity() {
                                     if (response.code == 200) {
                                         val responseBody = response.body?.string()
                                         val json = org.json.JSONObject(responseBody)
-
-                                        // json format
-                                        // [
-                                        //      allowed_resources: [
-                                        //          {
-                                        //              "isAllowed": false,
-                                        //              "name": "Graphing Calculator",
-                                        //              "url": "https://www.desmos.com/calculator"
-                                        //          }
-                                        //      ]
-                                        // ]
 
                                         val allowedResources = json.getJSONArray("allowed_resources")
 
