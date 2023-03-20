@@ -63,7 +63,7 @@ class FirstFragment : Fragment() {
         }
 
         // print allowed calculators
-        println(app.getAllowedCalculators())
+        println("allowed calculators " + app.getAllowedCalculators())
 
         // update the spinner calculatorSpinner
         binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), androidx.transition.R.layout.support_simple_spinner_dropdown_item, app.getAllowedCalculators().toTypedArray())

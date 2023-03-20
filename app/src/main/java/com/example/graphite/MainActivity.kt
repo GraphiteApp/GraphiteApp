@@ -121,10 +121,10 @@ class MainActivity : AppCompatActivity() {
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                         if (response.code == 200) {
                             // Get allowed calculators
-                            val allowedCalculators = arrayListOf<String>()
+                            val allowedCalculators = arrayListOf<Map<String, String>>()
 
                             val allowedCalculatorRequest = okhttp3.Request.Builder()
-                                .url(apiURL + "get_calculators" + "?class_code=" + teacherCode)
+                                .url(apiURL + "get_resources" + "?class_code=" + teacherCode)
                                 .build()
 
                             client.newCall(allowedCalculatorRequest).enqueue(object: okhttp3.Callback {
@@ -136,25 +136,33 @@ class MainActivity : AppCompatActivity() {
                                     if (response.code == 200) {
                                         val responseBody = response.body?.string()
                                         val json = org.json.JSONObject(responseBody)
-                                        // get basic
-                                        val basic = json.getBoolean("basic")
-                                        if (basic) {
-                                            allowedCalculators += "Basic"
-                                        }
-                                        // get scientific
-                                        val scientific = json.getBoolean("scientific")
-                                        if (scientific) {
-                                            allowedCalculators += "Scientific"
-                                        }
-                                        // get graphing
-                                        val graphing = json.getBoolean("graphing")
-                                        if (graphing) {
-                                            allowedCalculators += "Graphing"
+
+                                        // json format
+                                        // [
+                                        //      allowed_resources: [
+                                        //          {
+                                        //              "isAllowed": false,
+                                        //              "name": "Graphing Calculator",
+                                        //              "url": "https://www.desmos.com/calculator"
+                                        //          }
+                                        //      ]
+                                        // ]
+
+                                        val allowedResources = json.getJSONArray("allowed_resources")
+
+                                        for (i in 0 until allowedResources.length()) {
+                                            val resource = allowedResources.getJSONObject(i)
+                                            if (resource.getBoolean("isAllowed")) {
+                                                val name = resource.getString("name")
+                                                val url = resource.getString("url")
+
+                                                allowedCalculators.add(mapOf("name" to name, "url" to url))
+                                            }
                                         }
 
                                         // move to first fragment, pass in allowedCalculators
                                         val bundle = Bundle();
-                                        bundle.putStringArrayList("allowedCalculators", allowedCalculators)
+                                        bundle.putSerializable("allowedCalculators", allowedCalculators)
                                         val intent = android.content.Intent(this@MainActivity, ExamActivity::class.java)
                                         intent.putExtras(bundle)
                                         startActivity(intent)
