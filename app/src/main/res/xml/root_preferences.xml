@@ -18,7 +18,7 @@
         <EditTextPreference
             app:key="api_url"
             app:title="API URL"
-            app:defaultValue="https://cm.thearchons.xyz/api/"
+            app:defaultValue="https://graphite.thearchons.xyz/api/"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>

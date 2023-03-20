@@ -50,7 +50,6 @@ class SecondFragment : Fragment() {
         desmos.settings.useWideViewPort = true
 
         desmos.loadUrl(app.getCalculatorURL())
-
     }
 
     override fun onDestroyView() {
