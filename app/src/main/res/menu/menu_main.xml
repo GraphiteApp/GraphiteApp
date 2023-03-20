@@ -10,6 +10,6 @@
     <item
         android:id="@+id/action_exam"
         android:orderInCategory="100"
-        android:title="Enter Exam"
+        android:title="@string/enter_class"
         app:showAsAction="never" />
 </menu>

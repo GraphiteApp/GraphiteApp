@@ -83,11 +83,11 @@ class FirstFragment : Fragment() {
             binding.exitExam.visibility = View.VISIBLE
             // if calculators is empty
             if (app.getAllowedCalculators().isEmpty()) { // if not allowed any calculators
-                binding.textviewFirst.text = "Exam Mode:\n\n No Calculators Allowed"
+                binding.textviewFirst.text = "Class Mode:\n\n No Calculators Allowed"
                 binding.calculatorSpinner.visibility = View.GONE
                 binding.buttonFirst.visibility = View.GONE
             } else {
-                binding.textviewFirst.text = "Exam Mode"
+                binding.textviewFirst.text = "Class Mode"
                 binding.calculatorSpinner.visibility = View.VISIBLE
                 binding.buttonFirst.visibility = View.VISIBLE
             }
@@ -95,7 +95,7 @@ class FirstFragment : Fragment() {
             binding.exitExam.visibility = View.GONE
             binding.calculatorSpinner.visibility = View.VISIBLE
             binding.buttonFirst.visibility = View.VISIBLE
-            binding.textviewFirst.text = "Welcome! Select the desired calculator type below."
+            binding.textviewFirst.text = "Welcome! Select the desired Resource below."
         }
     }
 
