@@ -44,7 +44,9 @@ class ExamActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // get allowedCalculators from intent
-        intent.getStringArrayListExtra("allowedCalculators")?.let { app.setAllowedCalculators(it) }
+        intent.getSerializableExtra("allowedCalculators")?.let {
+            app.setAllowedCalculators(it as ArrayList<Map<String, String>>)
+        }
 
         // enable exam mode
         app.setIsExamMode(true)
@@ -86,7 +88,13 @@ class ExamActivity : AppCompatActivity() {
                 app.setIsExamMode(false)
 
                 // enable all calculators
-                app.setAllowedCalculators(arrayListOf("Basic", "Scientific", "Graphing"))
+                app.setAllowedCalculators(
+                    arrayListOf(
+                        mapOf("name" to "Graphing Calculator", "id" to "graphing"),
+                        mapOf("name" to "Scientific Calculator", "id" to "scientific"),
+                        mapOf("name" to "Basic Calculator", "id" to "basic")
+                    )
+                )
 
                 // finish activity
                 finish()

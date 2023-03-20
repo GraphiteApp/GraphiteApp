@@ -50,23 +50,28 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+        val allowedCalculators = app.getAllowedCalculators();
+
+        val allowedCalculatorsNames = allowedCalculators.map { it["name"] }
+
+        println("allowed calculators: $allowedCalculators")
+
+        // update the spinner calculatorSpinner
+        binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), androidx.transition.R.layout.support_simple_spinner_dropdown_item, allowedCalculatorsNames.toTypedArray())
+
         binding.buttonFirst.setOnClickListener {
             // set appModel in mainactivity.kt to the new url from calculatorSpinner
-            when (binding.calculatorSpinner.selectedItem.toString()) {
-                "Basic" -> app.setCalculatorURL("https://www.desmos.com/fourfunction")
-                "Scientific" -> app.setCalculatorURL("https://www.desmos.com/scientific")
-                "Graphing" -> app.setCalculatorURL("https://www.desmos.com/calculator")
+            for (calculator in allowedCalculators) {
+                if (calculator["name"] == binding.calculatorSpinner.selectedItem) {
+                    app.setCalculatorURL(calculator["url"]!!)
+                }
             }
 
             // navigate to the second fragment
             navigateToSecondFragment()
         }
-
-        // print allowed calculators
-        println("allowed calculators " + app.getAllowedCalculators())
-
-        // update the spinner calculatorSpinner
-        binding.calculatorSpinner.adapter = ArrayAdapter(requireContext(), androidx.transition.R.layout.support_simple_spinner_dropdown_item, app.getAllowedCalculators().toTypedArray())
 
         // if exit_exam button is clicked run leaveExam in examactivity
         binding.exitExam.setOnClickListener {
@@ -82,7 +87,7 @@ class FirstFragment : Fragment() {
                 binding.calculatorSpinner.visibility = View.GONE
                 binding.buttonFirst.visibility = View.GONE
             } else {
-                binding.textviewFirst.text = "Exam Mode:\n\n Allowed Calculators:\n${app.getAllowedCalculators().joinToString("\n")}"
+                binding.textviewFirst.text = "Exam Mode"
                 binding.calculatorSpinner.visibility = View.VISIBLE
                 binding.buttonFirst.visibility = View.VISIBLE
             }

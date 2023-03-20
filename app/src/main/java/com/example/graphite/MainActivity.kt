@@ -28,13 +28,13 @@ class AppModel: ViewModel() {
     }
 
     // arraylist of allowed calculators
-    private var allowedCalculators = ArrayList<String>()
+    private var allowedCalculators = ArrayList<Map<String, String>>()
 
-    fun getAllowedCalculators(): ArrayList<String> {
+    fun getAllowedCalculators(): ArrayList<Map<String, String>> {
         return allowedCalculators
     }
 
-    fun setAllowedCalculators(newAllowedCalculators: ArrayList<String>) {
+    fun setAllowedCalculators(newAllowedCalculators: ArrayList<Map<String, String>>) {
         allowedCalculators = newAllowedCalculators
     }
 
@@ -64,7 +64,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // set allowed calculators to all 3
-        app.setAllowedCalculators(arrayListOf("Basic", "Scientific", "Graphing"))
+        ExamActivity.app.setAllowedCalculators(
+            arrayListOf(
+                mapOf("name" to "Graphing Calculator", "id" to "graphing"),
+                mapOf("name" to "Scientific Calculator", "id" to "scientific"),
+                mapOf("name" to "Basic Calculator", "id" to "basic")
+            )
+        )
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
