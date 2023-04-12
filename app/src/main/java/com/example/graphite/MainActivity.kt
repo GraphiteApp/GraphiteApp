@@ -38,6 +38,14 @@ class AppModel: ViewModel() {
         allowedCalculators = newAllowedCalculators
     }
 
+    fun resetAllowedCalculators() {
+        allowedCalculators = arrayListOf(
+            mapOf("name" to "Basic Calculator", "url" to "https://www.desmos.com/fourfunction"),
+            mapOf("name" to "Scientific Calculator", "url" to "https://www.desmos.com/scientific"),
+            mapOf("name" to "Graphing Calculator", "url" to "https://www.desmos.com/calculator"),
+        )
+    }
+
     // is exam mode
     private var isExamMode = false
 
@@ -63,12 +71,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // set allowed calculators to all desmos calculators
-        app.setAllowedCalculators(arrayListOf(
-            mapOf("name" to "Basic Calculator", "url" to "https://www.desmos.com/fourfunction"),
-            mapOf("name" to "Scientific Calculator", "url" to "https://www.desmos.com/scientific"),
-            mapOf("name" to "Graphing Calculator", "url" to "https://www.desmos.com/calculator"),
-        ))
+        // reset allowed calculators
+        app.resetAllowedCalculators()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

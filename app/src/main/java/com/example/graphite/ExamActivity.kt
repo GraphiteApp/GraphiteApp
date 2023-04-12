@@ -87,14 +87,8 @@ class ExamActivity : AppCompatActivity() {
                 // disable exam mode
                 app.setIsExamMode(false)
 
-                // enable all calculators
-                app.setAllowedCalculators(
-                    arrayListOf(
-                        mapOf("name" to "Graphing Calculator", "id" to "graphing"),
-                        mapOf("name" to "Scientific Calculator", "id" to "scientific"),
-                        mapOf("name" to "Basic Calculator", "id" to "basic")
-                    )
-                )
+                // reset calculators
+                app.resetAllowedCalculators()
 
                 // finish activity
                 finish()
